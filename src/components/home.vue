@@ -11,12 +11,12 @@
       <h2>电商后台管理系统</h2>
     </el-col>
     <el-col :span="1" class="loginout">
-      <a href="">退出</a>
+      <a href="#" @click.prevent="handleLoginout()">退出</a>
     </el-col>
 </el-row>
   </el-header>
   <el-container>
-    <el-aside width="400px" class="aside"><el-col :span="12">
+    <el-aside width="200px" class="aside">
     <el-menu unique-opened default-active="2">
       <el-submenu index="1">
         <template slot="title">
@@ -95,7 +95,7 @@
         </el-menu-item-group>
       </el-submenu>
     </el-menu>
-  </el-col></el-aside>
+ </el-aside>
     <el-main class="main">Main</el-main>
   </el-container>
 </el-container>
@@ -103,7 +103,29 @@
 
 <script>
 export default {
+// 判断用户是否登录，未登录，请登录
+beforeCreate(){
+if (!localStorage.getItem('token')) {
+    this.$message.warning('请登录')
+    this.$router.push({
+      name:"login"
+    })
+}
+},
 
+methods:{
+// 退出登录
+handleLoginout(){
+  // 清除token
+  localStorage.clear()
+  // 回到登录组件
+  this.$router.push({
+    name:"login"
+  })
+  // 提示
+  this.$message.success('退出成功')
+}
+  }
 }
 </script>
 
@@ -115,7 +137,6 @@ export default {
 .container .header {
   background-color: #B3C0D1
 }
-
 .middle {
   color: #fff;
   text-align: center;

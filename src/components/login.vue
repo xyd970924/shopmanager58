@@ -1,8 +1,8 @@
 <template>
 <div class="wrap">
-  <el-form 
-  label-position="top" 
-  label-width="80px" 
+  <el-form
+  label-position="top"
+  label-width="80px"
   :model="formdata">
     <h2>用户登录</h2>
     <el-form-item label="用户名">
@@ -21,37 +21,30 @@ export default {
   data () {
     return {
       formdata: {
-        username: "",
-        password: ""
+        username: '',
+        password: ''
       }
     }
   },
-  methods:{
-   async handleLogin() {
-    const res = await this.$http
-        .post("login", this.formdata)
+  methods: {
+    async handleLogin () {
+      const res = await this.$http
+        .post('login', this.formdata)
 
-        const {data:{meta:{msg,status}},data} = res
-          if (status===200) {
-            localStorage.setItem("token",data.token)
-            this.$router.push({
-              name: "name"
-            })
-          }else{
-            // this.$message({
-            //   message:msg,
-            //   type:'warning'
-            // })
-             this.$message.warning(msg)
-          }
-        
+      const {data: {meta: {msg, status}}, data} = res
+      if (status === 200) {
+        localStorage.setItem('token', data.token)
+        this.$router.push({
+          name: 'home'
+        })
+      } else {
+        this.$message.warning(msg)
+      }
     }
-  },
-  mounted() {
-    console.log(this.$http);
-    
   }
+
 }
+
 </script>
 
 <style>
@@ -72,14 +65,3 @@ export default {
   width: 100%;
 }
 </style>
-
-
-/**
-.then((res) => {
-          // console.log(res);
-
-          
-          
-        })
-
- */
