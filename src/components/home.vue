@@ -17,14 +17,14 @@
   </el-header>
   <el-container>
     <el-aside width="200px" class="aside">
-    <el-menu unique-opened default-active="2">
+    <el-menu router unique-opened default-active="2">
       <el-submenu index="1">
         <template slot="title">
           <i class="el-icon-location"></i>
           <span>用户管理</span>
         </template>
         <el-menu-item-group>
-          <el-menu-item index="1-3">
+          <el-menu-item index="users">
             <i class="el-icon-location"></i>
             用户列表
           </el-menu-item>
@@ -96,7 +96,9 @@
       </el-submenu>
     </el-menu>
  </el-aside>
-    <el-main class="main">Main</el-main>
+    <el-main class="main">
+      <router-view></router-view>
+    </el-main>
   </el-container>
 </el-container>
 </template>
@@ -104,27 +106,27 @@
 <script>
 export default {
 // 判断用户是否登录，未登录，请登录
-beforeCreate(){
-if (!localStorage.getItem('token')) {
-    this.$message.warning('请登录')
-    this.$router.push({
-      name:"login"
-    })
-}
-},
+  beforeCreate () {
+    if (!localStorage.getItem('token')) {
+      this.$message.warning('请登录')
+      this.$router.push({
+        name: 'login'
+      })
+    }
+  },
 
-methods:{
-// 退出登录
-handleLoginout(){
-  // 清除token
-  localStorage.clear()
-  // 回到登录组件
-  this.$router.push({
-    name:"login"
-  })
-  // 提示
-  this.$message.success('退出成功')
-}
+  methods: {
+    // 退出登录
+    handleLoginout () {
+      // 清除token
+      localStorage.clear()
+      // 回到登录组件
+      this.$router.push({
+        name: 'login'
+      })
+      // 提示
+      this.$message.success('退出成功')
+    }
   }
 }
 </script>

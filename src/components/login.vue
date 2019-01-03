@@ -31,7 +31,7 @@ export default {
       const res = await this.$http
         .post('login', this.formdata)
 
-      const {data: {meta: {msg, status}}, data} = res
+      const {data:{meta:{msg,status},data}}=res
       if (status === 200) {
         localStorage.setItem('token', data.token)
         this.$router.push({
