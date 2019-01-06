@@ -8,6 +8,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import Http from '@/plugins/http.js'
 import '@/assets/index.css'
+import MyBread from '@/components/cusBread.vue'
 
 Vue.use(Http)
 Vue.use(ElementUI)
@@ -15,6 +16,8 @@ Vue.use(ElementUI)
 Vue.filter('fmDate', (v) => {
   return moment(v).format('YYYY-MM-DD')
 })
+// 注册全局对象
+Vue.component(MyBread.name, MyBread)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
