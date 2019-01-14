@@ -1,9 +1,13 @@
 <template>
   <el-card class="card">
     <!-- 面包屑 -->
-    <my-bread level1="商品列表" level2="商品分类"></my-bread>
+    <my-bread level1="商品管理" level2="商品列表"></my-bread>
     <!-- 提醒 -->
-    <el-alert title="添加商品信息" type="info" center show-icon class="alert"></el-alert>
+    <el-row class="alert">
+      <el-col>
+        <el-alert title="添加商品信息" type="info" center show-icon :closable="false"></el-alert>
+      </el-col>
+    </el-row>
     <!-- 步骤条 -->
     <el-steps :active="1*active" align-center class="steps">
       <el-step title="基本信息"></el-step>
@@ -13,12 +17,13 @@
       <el-step title="商品内容"></el-step>
     </el-steps>
     <!-- tabs切换 -->
-    <el-form v-model="form" class="form" label-position="top">
-      <el-tabs @tab-click="changeTab()" :tab-position="tabPosition" v-model="active" class="tabs">
+    <el-form :model="form" class="form" label-position="top">
+      <el-tabs @tab-click="changeTab()" tab-position="left" v-model="active" class="tabs">
         <el-tab-pane name="1" label="基本信息">
           <el-form-item label="商品名称">
             <el-input v-model="form.goods_name"></el-input>
           </el-form-item>
+
           <el-form-item label="商品价格">
             <el-input v-model="form.goods_price"></el-input>
           </el-form-item>
@@ -41,14 +46,14 @@
           </el-form-item>
         </el-tab-pane>
         <el-tab-pane name="2" label="商品参数">
-          <el-form-item :label="item1.attr_name" v-for="(item1,i) in arrDy" :key="i">
+          <el-form-item :label="item1.attr_name" v-for="(item1,i) in arrDy" :key="item1.attr_id">
             <el-checkbox-group v-model="item1.attr_vals">
               <el-checkbox border v-for="(item2,i) in item1.attr_vals" :key="i" :label="item2"></el-checkbox>
             </el-checkbox-group>
           </el-form-item>
         </el-tab-pane>
         <el-tab-pane name="3" label="商品属性">
-          <el-form-item :label="item.attr_name" v-for="(item,i) in arrStatic" :key="i">
+          <el-form-item :label="item.attr_name" v-for="(item,i) in arrStatic" :key="item.attr_id">
             <el-input v-model="item.attr_vals"></el-input>
           </el-form-item>
         </el-tab-pane>
@@ -101,13 +106,12 @@ export default {
   },
   data() {
     return {
-      tabPosition: "left",
       active: "1",
       form: {
         goods_name: "",
         goods_price: "",
-        goods_number: "",
         goods_weight: "",
+        goods_number: "",
         goods_introduce: "",
         goods_cat: "",
         pics: [],
@@ -140,12 +144,12 @@ export default {
       // 动态参数数组
       const arr1 = this.arrDy;
       const arr1New = arr1.map(item => {
-        return { attr_id: item.atrr_id, attr_value: item.attr_vals };
+        return { attr_id: item.attr_id, attr_value: item.attr_vals };
       });
       // 静态参数数组
       const arr2 = this.arrStatic;
       const arr2New = arr2.map(item => {
-        return { attr_id: item.atrr_id, attr_value: item.attr_vals };
+        return { attr_id: item.attr_id, attr_value: item.attr_vals };
       });
 
       const arr = [...arr1New, ...arr2New];
@@ -154,11 +158,12 @@ export default {
       this.form.attrs = arr;
       // console.log(this.form.attrs);
 
+      console.log(this.form);
       const res = await this.$http.post(`goods`, this.form);
-      console.log(res);
-      this.$router.push({
-        name: "goods"
-      });
+      // console.log(res);
+      // this.$router.push({
+      //   name: "goods"
+      // });
     },
     // 图片上传
     handleRemove(file) {

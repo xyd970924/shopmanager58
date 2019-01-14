@@ -22,7 +22,7 @@
       </el-col>
     </el-row>
     <!-- 表格 -->
-    <el-table :data="tableData" style="width: 100%">
+    <el-table v-loading="loading" :data="tableData" style="width: 100%">
       <el-table-column prop="id" label="#" width="80"></el-table-column>
       <el-table-column prop="username" label="姓名" width="80"></el-table-column>
       <el-table-column prop="email" label="邮箱" width="160"></el-table-column>
@@ -144,6 +144,7 @@
 export default {
   data() {
     return {
+      loading: false,
       query: "",
       tableData: [],
       query: "",
@@ -262,8 +263,7 @@ export default {
     // 添加用户发送请求
     async addUser() {
       // 发送请求
-      const AUTH_TOKEN = localStorage.getItem("token");
-      this.$http.defaults.headers.common["Authorization"] = AUTH_TOKEN;
+
       const res = await this.$http.post(`users`, this.form);
       console.log(res);
       const {
@@ -274,8 +274,6 @@ export default {
         this.dialogFormVisibleAdd = false;
         // 刷新表格
         this.getTableData();
-      } else {
-        this.$message.warning(msg);
       }
     },
     // 显示添加用户对话框
@@ -306,8 +304,7 @@ export default {
 
     //  获取列表数据
     async getTableData() {
-      const AUTH_TOKEN = localStorage.getItem("token");
-      this.$http.defaults.headers.common["Authorization"] = AUTH_TOKEN;
+      this.loading = true;
 
       const res = await this.$http.get(
         `users?query=${this.query}&pagenum=${this.pagenum}&pagesize=${
@@ -320,12 +317,11 @@ export default {
         data: { total, users }
       } = res.data;
       if (status === 200) {
+        this.loading = false;
         // 获取成功
         this.tableData = users;
         this.total = total;
         this.$message.success(msg);
-      } else {
-        this.$message.warning(msg);
       }
     }
   }
